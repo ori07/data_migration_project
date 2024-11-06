@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-class FileUploadSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UploadedFile
-        fields = ('file',)
+# Class to process the parameter for upload file service
+class FileUploadSerializer(serializers.Serializer):
+        file = serializers.FileField()
+        table_name = serializers.CharField(max_length=100)
