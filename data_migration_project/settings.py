@@ -37,8 +37,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "data_processing_service",
+    "rest_framework",
     "file_upload_service",
+    "data_processing_service",
 ]
 
 MIDDLEWARE = [
@@ -120,7 +121,3 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-#Asynchronous Task
-CELERY_BROKER_URL = 'amqp://localhost//'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
