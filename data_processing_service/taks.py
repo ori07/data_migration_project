@@ -1,9 +1,12 @@
 from celery import shared_task
-from .models import Job, Department, Hired_Employee, UploadedFile
+from file_upload_service.models import Job, Department, Hired_Employee, UploadedFile
 import pandas as pd
 
 @shared_task
 def process_file(file_id, table_name):
+    print("Entrando a Process File")
+    print(file_id0)
+    print(table_name)
     file = UploadedFile.objects.get(id=file_id)
     df = pd.read_csv(file.file.path)
     if table_name == 'Job':
