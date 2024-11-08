@@ -15,18 +15,23 @@ class FileUploadView (APIView):
             uploaded_file = validated_data['file']
             table_name = validated_data['table_name']
             # Save the file to a temporary directory
-            fs = FileSystemStorage(location='tmp')
+            fs = FileSystemStorage(location='data_processing_service/tmp')
             filename = fs.save(uploaded_file.name, uploaded_file)
             file_url = fs.url(filename)
 
             # Wrapping the data to process
             data_to_send = {
-                'filepath': file_url,
+                'file_path': file_url,
                 'table_name': table_name
             }
-            headers = {'Content-Type': uploaded_file.content_type}
+            #headers = {'Content-Type': uploaded_file.content_type}
             print("llamando al metodo process_file, del servicio data_processing_service")
-            response = requests.post('http://127.0.0.1:8000/data_processing_service/process_file', json=data_to_send, headers=headers)
+            # Construct absolute URL
+            # url = request.build_absolute_uri(reverse('process_view'))
+            url = 'http://localhost:8000/process_file/'
+            #url = reverse('process_view')
+            print(url)
+            response = requests.post(url, json=data_to_send)
             if response.status_code == 200:
                 print('Archivo procesado, Saliendo del metodo POST en views')
                 return Response({'message': 'File uploaded and processed successfully'}, status=status.HTTP_201_CREATED)

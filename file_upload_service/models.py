@@ -1,18 +1,23 @@
 from django.db import models
 
+class FileUploadJob(models.Model):
+    file_name = models.CharField(max_length=255)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=50, default='pending')
+    error_message = models.TextField(null=True, blank=True)
+
 class Job(models.Model):
     # The primary key will auto-increment by default
-    #id = models.IntegerField(primary_key=True)
-    job = models.CharField(max_length=100)
+    id = models.IntegerField(primary_key=True)
+    job = models.CharField(max_length=100, unique=True)
 
 class Department(models.Model):
     # The primary key will auto-increment by default
-    #id = models.IntegerField(primary_key=True)
-    department = models.CharField(max_length=100)
+    id = models.IntegerField(primary_key=True)
+    department = models.CharField(max_length=100, unique=True)
 
 class Hired_Employee(models.Model):
     # The primary key will auto-increment by default
-    #id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=100)
     datetime = models.CharField(max_length=30)
     department_id = models.ForeignKey(Department, on_delete=models.CASCADE)

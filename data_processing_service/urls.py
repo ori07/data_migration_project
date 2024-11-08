@@ -1,6 +1,6 @@
 from django.urls import path
-from . import views
+from .views import DataProcessingView
 
 urlpatterns = [
-    path("process_file/", views.DataProcessingView.as_view()),
+    path("process_file/", DataProcessingView.as_view(), name='process_view'),
 ]
