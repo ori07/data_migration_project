@@ -1,0 +1,31 @@
+WITH DataWithQuartile AS (
+  SELECT
+    a.department as Department, b.job as Job, strftime('%Y', c.datetime) as year,
+    NTILE(4) OVER (PARTITION BY strftime('%Y', c.datetime) ORDER BY c.datetime) AS quartile
+  FROM hired_employees AS c
+  INNER JOIN department a ON c.department_id = a.id
+  INNER JOIN job b ON c.job_id = b.id
+)
+SELECT
+  Department,
+  Job,
+  COUNT(*) FILTER (WHERE quartile = 1 and year='2021') AS Q1,
+  COUNT(*) FILTER (WHERE quartile = 2 and year= '2021') AS Q2,
+  COUNT(*) FILTER (WHERE quartile = 3 and year='2021') AS Q3,
+  COUNT(*) FILTER (WHERE quartile = 4 and year='2021') AS Q4
+FROM DataWithQuartile
+GROUP BY Department, Job, year
+ORDER BY Department, Job, year;
+
+WITH EmployeedHired AS (
+  SELECT
+    a.id as id, a.department as Department, strftime('%Y', c.datetime) as year, COUNT(*) as hired
+  FROM hired_employees AS c
+  INNER JOIN department a ON c.department_id = a.id
+  GROUP BY a.id, a.department, year
+)
+
+Select id, Department, hired
+FROM EmployeedHired
+WHERE hired > (SELECT AVG(hired) FROM EmployeedHired WHERE year='2021')
+ORDER BY id DESC;
